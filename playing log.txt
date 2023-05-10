@@ -1,0 +1,123 @@
+Microsoft Windows [Version 10.0.19044.2846]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Luke>cd C:\Users\Luke\OneDrive\Documents\Post-college projects
+
+C:\Users\Luke\OneDrive\Documents\Post-college projects>python
+Python 3.11.2 (tags/v3.11.2:878ead1, Feb  7 2023, 16:38:35) [MSC v.1934 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import speech_recognition as sr
+>>> r = sr.Recognizer()
+>>> mic = sr.Microphone()
+>>> sr.Microphone.list_microphone_names()
+['Microsoft Sound Mapper - Input', 'Microphone (Conexant SmartAudio', 'CABLE Output (VB-Audio Virtual ', 'Microsoft Sound Mapper - Output', 'Speakers (Conexant SmartAudio H', 'CABLE Input (VB-Audio Virtual C', 'Primary Sound Capture Driver', 'Microphone (Conexant SmartAudio HD)', 'CABLE Output (VB-Audio Virtual Cable)', 'Primary Sound Driver', 'Speakers (Conexant SmartAudio HD)', 'CABLE Input (VB-Audio Virtual Cable)', 'CABLE Input (VB-Audio Virtual Cable)', 'Speakers (Conexant SmartAudio HD)', 'CABLE Output (VB-Audio Virtual Cable)', 'Microphone (Conexant SmartAudio HD)', 'Microphone (Conexant HD Audio capture)', 'Stereo Mix (Conexant HD Stereo Mix)', 'Speakers (Conexant HD Audio output)', 'Headphones ()', 'Line ()', 'Headphones ()', "Output (@System32\\drivers\\bthhfenum.sys,#4;%1 Hands-Free HF Audio%0\r\n;(Luke's Phone))", "Input (@System32\\drivers\\bthhfenum.sys,#4;%1 Hands-Free HF Audio%0\r\n;(Luke's Phone))", 'Headphones ()', 'Headphones ()', 'Headset (@System32\\drivers\\bthhfenum.sys,#2;%1 Hands-Free AG Audio%0\r\n;(DITTY))', 'Headset (@System32\\drivers\\bthhfenum.sys,#2;%1 Hands-Free AG Audio%0\r\n;(DITTY))', 'CABLE Output (VB-Audio Point)', 'Speakers (VB-Audio Point)', 'Headset (@System32\\drivers\\bthhfenum.sys,#2;%1 Hands-Free AG Audio%0\r\n;(HD 4.50BTNC))', 'Headset (@System32\\drivers\\bthhfenum.sys,#2;%1 Hands-Free AG Audio%0\r\n;(HD 4.50BTNC))', 'Headset (@System32\\drivers\\bthhfenum.sys,#2;%1 Hands-Free AG Audio%0\r\n;(SoundPal))', 'Headset (@System32\\drivers\\bthhfenum.sys,#2;%1 Hands-Free AG Audio%0\r\n;(SoundPal))']
+>>> mic = sr.Microphone(device_index=3)
+>>> with mic as source:
+...     audio = r.listen(source)
+...
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+  File "C:\Users\Luke\AppData\Local\Programs\Python\Python311\Lib\site-packages\speech_recognition\__init__.py", line 465, in listen
+    assert source.stream is not None, "Audio source must be entered before listening, see documentation for ``AudioSource``; are you using ``source`` outside of a ``with`` statement?"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Audio source must be entered before listening, see documentation for ``AudioSource``; are you using ``source`` outside of a ``with`` statement?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "C:\Users\Luke\AppData\Local\Programs\Python\Python311\Lib\site-packages\speech_recognition\__init__.py", line 189, in __exit__
+    self.stream.close()
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'close'
+>>> mic = sr.Microphone(device_index=2)
+>>> with mic as source:
+...     audio = r.listen(source)
+...
+>>>
+>>> with mic as source:
+...     audio = r.listen(source)
+...
+>>>
+>>> r.recognize_google(audio)
+'CSX equipment defect detector 5.3 track one no defects no defense'
+>>>
+>>> r.recognize_ibm(audio)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: Recognizer.recognize_ibm() missing 1 required positional argument: 'key'
+>>> r.recognize_google(audio)
+'CSX equipment defect detector 5.3 track one no defects no defense'
+>>> r.recognize_bing(audio)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: Recognizer.recognize_bing() missing 1 required positional argument: 'key'
+>>> r.recognize_wit(audio)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: Recognizer.recognize_wit() missing 1 required positional argument: 'key'
+>>> r.recognize_houndify(audio)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: Recognizer.recognize_houndify() missing 2 required positional arguments: 'client_id' and 'client_key'
+>>> r.listen(mic)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "C:\Users\Luke\AppData\Local\Programs\Python\Python311\Lib\site-packages\speech_recognition\__init__.py", line 465, in listen
+    assert source.stream is not None, "Audio source must be entered before listening, see documentation for ``AudioSource``; are you using ``source`` outside of a ``with`` statement?"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Audio source must be entered before listening, see documentation for ``AudioSource``; are you using ``source`` outside of a ``with`` statement?
+>>>
+>>>
+>>> r.pause_threshold = 3
+>>> with mic as source:
+...     audio = r.listen(source)
+...
+>>> r.recognize_google(audio)
+'CSX equipment defect detector 5.3 no defects no defense'
+>>> s = sr.Recognizer
+>>> s.pause_threshold=3
+>>> with mic as source:
+...     audio = s.listen(source)
+...
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+TypeError: Recognizer.listen() missing 1 required positional argument: 'source'
+>>> with mic as source:
+...     audio = s.listen(source)
+...
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+TypeError: Recognizer.listen() missing 1 required positional argument: 'source'
+>>>
+>>>
+>>>
+>>>
+>>> with mic as source:
+...     audio = r.listen(source)
+...
+>>> r.clear
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'Recognizer' object has no attribute 'clear'
+>>> r.clear()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'Recognizer' object has no attribute 'clear'
+>>> with mic as source:
+...     audio = s.listen(source)
+...
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+TypeError: Recognizer.listen() missing 1 required positional argument: 'source'
+>>> s = sr.Recognizer()
+>>> s.pause_threshold=3
+>>> with mic as source:
+...     audio = s.listen(source)
+...
+>>> s.recognize_google(audio)
+'CSX equipment defect detector 5.3 track one no defects No Effects photos'
+>>> s.phrase_time_limit=None
+>>> s.recognize_google(audio)
+'CSX equipment defect detector 5.3 track one no defects No Effects photos'
+>>>
