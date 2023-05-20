@@ -51,7 +51,7 @@ def loudnesscheck(stream,limit):
         return False
 
 
-
+print("initialized, now listening for broadcast...")
 try:
     while(True):
         if(loudnesscheck(audiostream,threshold)):
@@ -59,7 +59,7 @@ try:
             print("Defect broadcast detected, saving...")
             frames = [] #to hold frames of sound.
             #store chunks into frames for the duratioin of the recording time.
-            for i in range(0,(samplefreq * recordtime) / chunk):
+            for i in range(0,int((samplefreq * recordtime) / chunk)):
                 data = audiostream.read(chunk)
                 frames.append(data)
 
@@ -75,8 +75,8 @@ try:
             fileindex += 1
 except KeyboardInterrupt:
     # Stop and close the stream 
-    stream.stop_stream()
-    stream.close()
+    audiostream.stop_stream()
+    audiostream.close()
     # Terminate the PortAudio interface
     p.terminate()
     print("Recorder Exited successfully")
