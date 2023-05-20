@@ -3,6 +3,8 @@
 
 import pyaudio
 import wave
+import math
+import struct
 
 
 
@@ -13,7 +15,12 @@ channels = 2
 samplefreq = 44100  # Record at 44100 samples per second
 fileindex = 0
 inputindex = 2 #This will be different depending on what machine this code is deployed on. This indicates what sound input to listen to.
+swidth = 2
+normalizationconst = 1.0/32768.0 #Max and min of 16 bit int is +-32786. Using this, you can normalize a sample.
 recordtime = 20 #broadcast duration, assumes that there are no defects for simplicity.
+threshold = 10 #loudness threshold
+fileindex = 1
+filename = "defectdetect"
 
 
 #create pyaudio interface to portaudio
@@ -23,21 +30,59 @@ p = pyaudio.PyAudio()
 audiostream = p.open(format=sample_format,channels=channels,input_device_index=inputindex,rate=samplefreq,frames_per_buffer=chunk,input=True)
 
 #function to detect how loud the audio stream is
-def soundcheck(audiostream):
-    # TODO get a short sample of sound
+def loudnesscheck(stream,limit):
+    #get a short sample of sound
+    testsound = audiostream.read(chunk)
 
-    # TODO check the loudness
+    #check the loudness using RMS method
+    count = len(testsound) / swidth
+    format = "%dh" % (count)
+    shorts = struct.unpack(format, testsound)
+    sum_squares = 0.0
+    for sample in shorts:
+        n = sample * normalizationconst
+        sum_squares += n * n
+    rms = math.pow(sum_squares / count, 0.5) * 1000
 
-    # TODO return a boolean to indicate that loudness is above a certain threshold.
+    #return a boolean to indicate that loudness is above a certain threshold.
+    if rms > limit:
+        return True
+    else:
+        return False
 
-#run until program is stopped:
 
-#if noise is above a certain threshold:
-    #start recording and keep recording for a certain amount of time
 
-    #save the file
+try:
+    while(True):
+        if(loudnesscheck(audiostream,threshold)):
+            #record the sound
+            print("Defect broadcast detected, saving...")
+            frames = [] #to hold frames of sound.
+            #store chunks into frames for the duratioin of the recording time.
+            for i in range(0,(samplefreq * recordtime) / chunk):
+                data = audiostream.read(chunk)
+                frames.append(data)
 
-    #increment file number index.
+            #save the file
+            wf = wave.open((filename + str(fileindex)),"wb")
+            wf.setnchannels(channels)
+            wf.setsampwidth(p.get_sample_size(sample_format))
+            wf.setframerate(samplefreq)
+            wf.writeframes(b''.join(frames))
+            wf.close
 
+            #increment file number index.
+            fileindex += 1
+except KeyboardInterrupt:
+    # Stop and close the stream 
+    stream.stop_stream()
+    stream.close()
+    # Terminate the PortAudio interface
+    p.terminate()
+    print("Recorder Exited successfully")
+
+    
+# Consulted Sources:
 # https://realpython.com/playing-and-recording-sound-python/
 # https://stackoverflow.com/questions/39474111/recording-audio-for-specific-amount-of-time-with-pyaudio
+# https://stackoverflow.com/questions/66762815/why-is-32768-used-as-a-constant-to-normalize-the-wav-data-in-vggish
