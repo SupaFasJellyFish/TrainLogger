@@ -21,6 +21,7 @@ recordtime = 20 #broadcast duration, assumes that there are no defects for simpl
 threshold = 10 #loudness threshold
 fileindex = 1
 filename = "defectdetect"
+fileext = ".wav"
 
 
 #create pyaudio interface to portaudio
@@ -64,7 +65,7 @@ try:
                 frames.append(data)
 
             #save the file
-            wf = wave.open((filename + str(fileindex)),"wb")
+            wf = wave.open((filename + str(fileindex) + fileext),"wb")
             wf.setnchannels(channels)
             wf.setsampwidth(p.get_sample_size(sample_format))
             wf.setframerate(samplefreq)
@@ -73,6 +74,7 @@ try:
 
             #increment file number index.
             fileindex += 1
+            print("recording saved ready for next")
 except KeyboardInterrupt:
     # Stop and close the stream 
     audiostream.stop_stream()
