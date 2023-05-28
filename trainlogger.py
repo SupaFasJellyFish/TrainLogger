@@ -1,7 +1,8 @@
 import speech_recognition as sr
 import sqlite3
 
-worddigit = {"one":"1","two":"2","three":"3","four":"4","five":"5","six":"6","seven":"7","eight":"8","nine":"9"}
+#dict for spelled-out words 
+worddigit = {"zero":"0","one":"1","two":"2","three":"3","four":"4","five":"5","six":"6","seven":"7","eight":"8","niner":"9"}
 #Template defect detector broadcast:
 #CSX equipment defect detector milepost 5.3 track 1 No Defects No Defects Total Axle three eight four end of transmission
 
@@ -23,7 +24,7 @@ sourcestring=splsourcestring
 trackval = (((sourcestring.split("track"))[1].split("no defects"))[0])[1]
 
 #Determine if there are no defects
-if sourcestring.find("no defects") != -1:
+if sourcestring.find("no") != -1:
     defectval="NO"
 else:
     defectval="YES"
