@@ -22,7 +22,7 @@ try:
         try:
             # TODO swap speech recognition to Vosk
             defectbroadcast = r.recognize_google(audio)
-            sttlog.write(sttlog + "\n")
+            sttlog.write(defectbroadcast + "\n")
             print("interpreted as " + defectbroadcast)
         except:
             print("there was an error interpreting the speech. Please try again.")
