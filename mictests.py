@@ -20,6 +20,7 @@ try:
         print("heard, processing...")
         #interpret the audio, using a try to handle case where STT fails
         try:
+            # TODO swap speech recognition to Vosk
             defectbroadcast = r.recognize_google(audio)
             sttlog.write(sttlog + "\n")
             print("interpreted as " + defectbroadcast)
