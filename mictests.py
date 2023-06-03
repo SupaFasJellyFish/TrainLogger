@@ -5,7 +5,7 @@ r = sr.Recognizer()
 mic = sr.Microphone(device_index=2)
 
 #instantiate interpretation log file
-sttlog = open("speechtotextlog","w")
+sttlog = open("speechtotextlog.txt","w")
 
 #configure the recognizer instance
 #make the pause threshold longer because the default cuts off at "no defects"
