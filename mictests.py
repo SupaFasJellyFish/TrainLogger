@@ -24,7 +24,7 @@ try:
             #defectbroadcast = r.recognize_vosk(audio)
             #defectbroadcast = r.recognize_google(audio)
             defectbroadcast = r.recognize_whisper(audio, model = "small") #model attribute is whichever is preferred in the OpenAI Whisper docs. Default is base for SpeechRecognition library.
-            sttlog.write(defectbroadcast + "n")
+            sttlog.write(defectbroadcast + "\n")
             print("interpreted as " + defectbroadcast)
         except:
             print("there was an error interpreting the speech. Please try again.")
