@@ -3,10 +3,10 @@ import sqlite3
 from datetime import datetime
 
 #dict for common number misinterpretations by Whisper STT.
-worddigit = {"to":"2","too":"2","niner":"9","9R":"9"}
+worddigit = {"zero":"0","one":"1","two":"2","to":"2","too":"2","three":"3","four":"4","five":"5","six":"6","seven":"7","eight":"8","nine":"9","niner":"9","9R":"9"}
 
 #Table for letter and punctuation removal operations
-filtertable = str.maketrans("","","abcdefghijklmnopqrstuvwxyz.,? !")
+filtertable = str.maketrans("","","abcdefghijklmnopqrstuvwxyz.,? !-_|/")
 
 #Class to store data about a train
 class train:
@@ -17,9 +17,12 @@ class train:
 
 #SQL table schema (for reference):CREATE TABLE trains( timestamp DATETIME, axles INTEGER, defect TEXT NOT NULL, broadcast TEXT NOT NULL, track TEXT_NOT_NULL); 
 
-# TODO Prep sql database for I/O
+#Prep sql database for I/O
 dbconnection = sqlite3.connect("TrainLogger/trains.db")
 dbcursor = dbconnection.cursor()
+
+#set up text log for diagnostics in case interpretation fails. 
+debuglog = open("TrainLogger/diagdebug.txt","w")
 
 #Set up mic and recognizer objects for speech recognition
 r = sr.Recognizer()
@@ -70,6 +73,7 @@ try:
         traintime = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         print("Processing broadcast.")
         broadcast = r.recognize_whisper(audio, model = "small").lower() #Make the string lowercase to make processing easier.
+        debuglog.write(traintime + " " + broadcast)
 
         #Logic to check if a broadcast was full or not.
         if broadcast.find("equipment") * broadcast.find("transmission") > 1:
@@ -82,9 +86,10 @@ try:
             print("Broadcast was not a defect detector.")
 
 
-except KeyboardInterrupt:
+except (KeyboardInterrupt, ValueError) as error:
     #close access to database
     dbconnection.close()
+    debuglog.close()
     print("TrainLogger closed successfully.")
 
 
