@@ -18,7 +18,7 @@ class train:
 #SQL table schema (for reference):CREATE TABLE trains( timestamp DATETIME, axles INTEGER, defect TEXT NOT NULL, broadcast TEXT NOT NULL, track TEXT_NOT_NULL); 
 
 # TODO Prep sql database for I/O
-dbconnection = sqlite3.connect("trains.db")
+dbconnection = sqlite3.connect("TrainLogger/trains.db")
 dbcursor = dbconnection.cursor()
 
 #Set up mic and recognizer objects for speech recognition
@@ -61,11 +61,12 @@ def interpret(broadcast):
         axlecount = stringtonum(axlecountstr)
     return train(axlecount,track,defectval)
 
-while(True):
-    try:
+try:    
+    while(True):
         #logic to get string from RTL-SDR audio input
-        print("Listening for a broadcast...")
-        audio = r.listen(audiosource,timeout = None)
+        with audiosource as source:
+            print("Listening for a broadcast...")
+            audio = r.listen(audiosource,timeout = None)
         traintime = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         print("Processing broadcast.")
         broadcast = r.recognize_whisper(audio, model = "small").lower() #Make the string lowercase to make processing easier.
@@ -74,13 +75,16 @@ while(True):
         if broadcast.find("equipment") * broadcast.find("transmission") > 1:
             newtrain = interpret(broadcast)
             #Store the info about the train into the database
+            print("Train info stored into database.")
             dbcursor.execute("INSERT INTO trains (timestamp, axles, defects, broadcast, track) VALUES (?,?,?,?,?)", [traintime, newtrain.length, newtrain.defect, broadcast, newtrain.track])
             dbconnection.commit()
+        else:
+            print("Broadcast was not a defect detector.")
 
 
-    except KeyboardInterrupt:
-        #close access to database
-        dbconnection.close()
-        print("TrainLogger closed successfully.")
+except KeyboardInterrupt:
+    #close access to database
+    dbconnection.close()
+    print("TrainLogger closed successfully.")
 
 
