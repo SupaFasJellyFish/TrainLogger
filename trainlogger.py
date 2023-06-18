@@ -73,10 +73,10 @@ try:
         traintime = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         print("Processing broadcast.")
         broadcast = r.recognize_whisper(audio, model = "small").lower() #Make the string lowercase to make processing easier.
-        debuglog.write(traintime + " " + broadcast)
+        debuglog.write(traintime + " " + broadcast + "\n")
 
         #Logic to check if a broadcast was full or not.
-        if broadcast.find("equipment") * broadcast.find("transmission") > 1:
+        if broadcast.find("equipment") * broadcast.find("axle") * broadcast.find("transmission") > 1:
             newtrain = interpret(broadcast)
             #Store the info about the train into the database
             print("Train info stored into database.")
