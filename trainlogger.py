@@ -76,7 +76,7 @@ try:
         debuglog.write(traintime + " " + broadcast + "\n")
 
         #Logic to check if a broadcast was full or not.
-        if broadcast.find("equipment") * broadcast.find("axle") * broadcast.find("transmission") > 1:
+        if broadcast.find("equipment") > 0 and broadcast.find("axle") > 0 and broadcast.find("transmission") > 0:
             newtrain = interpret(broadcast)
             #Store the info about the train into the database
             print("Train info stored into database.")
