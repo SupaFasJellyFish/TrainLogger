@@ -25,3 +25,5 @@
  C.S.X. Equipment Defect Detector. Filepost 5.3. Track 1. No defects. No defects. Total Axle 4.3. To end of transmission.
  C-S-X Equipment defect detector, file post 5.3. No defects. No defects. Total axle 4.0.0. End of transmission.
  C.S.X. Equipment Defect Detector. Filepost 5.3. Track 1. No defects. No defects. Total Axle 3.6.4. End of transmission.
+2023/06/17 12:29:49 2023/06/17 13:15:33  csx equipment defect detector file post 5.3 2023/06/17 13:16:04  well, i'll go ahead.2023/06/17 13:17:11 2023/06/17 13:18:49  c.s.x. equipment defect detector. file post 5.3. track 1. no defects. no defects. end of transmission.(this one happened when a train was stopped for a long time on the rails. I guess it doesn't count axles if the train doesn't move quickly enough.
+"c.s.x. equipment defect detector. filepost. 5.3. no defects. no defects. total axle. 4. 0. 0. end of transmission." (this one failed because there was a period after "axle".)

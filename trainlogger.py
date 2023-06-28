@@ -55,7 +55,7 @@ def interpret(broadcast):
         # TODO save the broadcast string to the defect database
 
     #Get the axle count. Needs to be fed a lowercase string.
-    axlecountstr = broadcast.split("axle ")[1].split(" end of transmission")[0]
+    axlecountstr = broadcast.split("axle")[1].split("end of transmission")[0]
     # TODO filter the number string to get the mix of numbers, punctuation and words down to an integer.
     if axlecountstr.isnumeric():
         axlecount = int(axlecountstr)
@@ -68,10 +68,10 @@ try:
     while(True):
         #logic to get string from RTL-SDR audio input
         with audiosource as source:
-            print("Listening for a broadcast...")
+            print(datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "Listening for a broadcast...")
             audio = r.listen(audiosource,timeout = None)
         traintime = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
-        print("Processing broadcast.")
+        print(datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "Processing broadcast.")
         broadcast = r.recognize_whisper(audio, model = "small").lower() #Make the string lowercase to make processing easier.
         debuglog.write(traintime + " " + broadcast + "\n")
 
@@ -83,7 +83,7 @@ try:
             dbcursor.execute("INSERT INTO trains (timestamp, axles, defects, broadcast, track) VALUES (?,?,?,?,?)", [traintime, newtrain.length, newtrain.defect, broadcast, newtrain.track])
             dbconnection.commit()
         else:
-            print("Broadcast was not a defect detector.")
+            print(datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "Broadcast was not a defect detector.")
 
 
 except (KeyboardInterrupt, ValueError) as error:
